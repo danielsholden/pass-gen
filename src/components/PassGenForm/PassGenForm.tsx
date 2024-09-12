@@ -1,96 +1,70 @@
 import React from 'react';
 
 import { Slider } from './components/Slider';
+import { InputClipboard } from './components/InputClipboard';
+import { Checkbox } from './components/Checkbox';
+
+import { generatePassword } from './helpers/generatePass';
+import { Option } from './types';
 
 import styles from './PassGenForm.module.scss';
 
+const initOption = new Set([Option.LowerCase]);
+
 const PassGenForm = () => {
-  const [length, setLength] = React.useState(10);
-  const [includeLower, setIncludeLower] = React.useState(true);
-  const [includeUpper, setIncludeUpper] = React.useState(false);
-  const [includeNumbers, setIncludeNumbers] = React.useState(false);
-  const [includeSymbols, setIncludeSymbols] = React.useState(false);
+  const [passLength, setLength] = React.useState(10);
+  const [options, setOption] = React.useState<Set<Option>>(initOption);
   const [password, setPassword] = React.useState('');
 
-  const generatePassword = (): void => {
-    const lower = "abcdefghijklmnopqrstuvwxyz";
-    const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const numbers = "0123456789";
-    const symbols = "!@#$%^&*()_+[]{}|;:,.<>?";
-    let characterSet = "";
-
-    if (includeLower) characterSet += lower;
-    if (includeUpper) characterSet += upper;
-    if (includeNumbers) characterSet += numbers;
-    if (includeSymbols) characterSet += symbols;
-
-    if (characterSet === "") return;
-
-    let newPassword = "";
-    for (let i = 0; i < length; i++) {
-      const randomIndex = Math.floor(Math.random() * characterSet.length);
-      newPassword += characterSet[randomIndex];
+  const handleSelectOption = (option: Option): void => {
+    if (options.size === 1 && options.has(option)) {
+      return;
     }
-    setPassword(newPassword);
+    const newOptions = new Set(options);
+    if (options.has(option)) {
+      newOptions.delete(option);
+    } else {
+      newOptions.add(option);
+    }
+    setOption(newOptions);
   };
 
-  const copyToClipboard = (): void => {
-    navigator.clipboard.writeText(password);
-    alert('Password copied to clipboard');
+  const handleGeneratePassword = (): void => {
+    setPassword(generatePassword(passLength, options));
   };
 
   return (
     <div className={styles.container}>
-      <input
-        type="text"
-        className={styles.passwordOutput}
-        value={password}
-        placeholder='Generated password'
-        readOnly
-      />
-      <button
-        className={styles.copyButton}
-        onClick={copyToClipboard}
-      >
-        Copy
-      </button>
-      <Slider value={length} onChange={setLength} />
+      <InputClipboard value={password} />
+      <Slider value={passLength} onChange={setLength} />
       <div className={styles.options}>
-        <label>
-          <input
-            type="checkbox"
-            checked={includeLower}
-            onChange={() => setIncludeLower(!includeLower)}
-          />
+        <Checkbox
+          checked={options.has(Option.LowerCase)}
+          onChange={() => handleSelectOption(Option.LowerCase)}
+        >
           Include Lowercase
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={includeUpper}
-            onChange={() => setIncludeUpper(!includeUpper)}
-          />
+        </Checkbox>
+        <Checkbox
+          checked={options.has(Option.UpperCase)}
+          onChange={() => handleSelectOption(Option.UpperCase)}
+        >
           Include Uppercase
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={includeNumbers}
-            onChange={() => setIncludeNumbers(!includeNumbers)}
-          />
+        </Checkbox>
+        <Checkbox
+          checked={options.has(Option.Numbers)}
+          onChange={() => handleSelectOption(Option.Numbers)}
+        >
           Include Numbers
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={includeSymbols}
-            onChange={() => setIncludeSymbols(!includeSymbols)}
-          />
+        </Checkbox>
+        <Checkbox
+          checked={options.has(Option.Symbols)}
+          onChange={() => handleSelectOption(Option.Symbols)}
+        >
           Include Symbols
-        </label>
+        </Checkbox>
       </div>
-      <button className={styles.generateButton} onClick={generatePassword}>
-        Generate
+      <button className={styles.generateButton} onClick={handleGeneratePassword}>
+        Generate Password
       </button>
     </div>
   );

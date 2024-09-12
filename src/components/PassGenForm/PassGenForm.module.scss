@@ -1,64 +1,22 @@
-$primaryColor: #64f6ce;
-$primaryHoverColor: #4dd9b3;
-$borderColor: #ccc;
-$backgroundColor: #fff;
-$boxShadowColor: rgba(0, 0, 0, 0.1);
-$fontFamily: Arial, sans-serif;
-
 .container {
-  background-color: $backgroundColor;
-  border: 1px solid $borderColor;
+  background-color: #fff;
+  border: 1px solid #fff;
   padding: 20px;
   margin-top: 80px;
   border-radius: 10px;
   width: 100%;
-  box-shadow: 0 4px 8px $boxShadowColor;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
-.passwordOutput {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid $borderColor;
-  border-radius: 5px;
-  font-size: 16px;
-}
-
-.copyButton {
-  position: absolute;
-  top: 25px;
-  right: 20px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 18px;
-}
-
 .options {
-  margin-bottom: 20px;
-
-  label {
-    display: block;
-    margin-top: 10px;
-    font-size: 14px;
-  }
-}
-
-.optionsLabel {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-}
-
-.optionsInput {
-  margin-right: 10px;
+  margin: 20px 0 30px
 }
 
 .generateButton {
   width: 100%;
   padding: 10px;
-  background-color: $primaryColor;
+  background-color: #64b4f6;
   border: none;
   border-radius: 5px;
   font-size: 16px;
@@ -66,6 +24,6 @@ $fontFamily: Arial, sans-serif;
   transition: background-color 0.3s;
 
   &:hover {
-    background-color: $primaryHoverColor;
+    background-color: #4ba5ef;
   }
 }
